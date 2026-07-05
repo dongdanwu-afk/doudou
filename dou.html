@@ -1,0 +1,1689 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="豆豆的暑期大作战">
+<title>豆豆的暑期大作战</title>
+<style>
+:root {
+  --bg: #f5f0eb;
+  --card: #ffffff;
+  --primary: #4a90d9;
+  --primary-light: #e8f0fe;
+  --primary-dark: #357abd;
+  --gold: #f5a623;
+  --gold-light: #fff8e1;
+  --success: #52c41a;
+  --danger: #ff4d4f;
+  --text: #3d3226;
+  --text-light: #888;
+  --border: #e0d8cc;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --radius: 14px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.container { max-width: 720px; margin: 0 auto; padding: 10px 10px 50px; }
+
+/* 头部 */
+.header {
+  background: linear-gradient(135deg, #5ba0e8 0%, #4a90d9 40%, #3d7ec5 100%);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  color: #fff;
+  margin-bottom: 10px;
+  box-shadow: 0 3px 16px rgba(74,144,217,0.25);
+  position: relative;
+  overflow: hidden;
+}
+.header::after {
+  content: ''; position: absolute; top: -40px; right: -30px;
+  width: 120px; height: 120px; border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+.header::before {
+  content: ''; position: absolute; bottom: -20px; left: 20px;
+  width: 80px; height: 80px; border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 6px; position: relative; z-index: 1; }
+.header h1 { font-size: 19px; font-weight: 800; letter-spacing: 0.5px; }
+.header .level-badge {
+  background: rgba(255,255,255,0.28);
+  border-radius: 20px;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.coin-row {
+  display: flex; align-items: center; gap: 16px;
+  margin-top: 10px; position: relative; z-index: 1;
+}
+.coin-big {
+  font-size: 36px; font-weight: 900; line-height: 1;
+}
+.coin-label { font-size: 11px; opacity: 0.85; }
+.today-earn {
+  margin-left: auto; text-align: right;
+  font-size: 13px; opacity: 0.9;
+}
+.today-earn b { font-size: 20px; }
+.level-progress {
+  margin-top: 34px; position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px;
+}
+.level-progress .bar-bg {
+  flex: 1; height: 6px; background: rgba(255,255,255,0.3); border-radius: 3px; overflow: visible;
+  position: relative;
+}
+.level-progress .bar-fill {
+  height: 100%; background: #fff; border-radius: 3px; transition: width 0.5s ease;
+}
+.pixel-guy-wrap {
+  position: absolute;
+  top: -30px;
+  transform: translateX(-50%);
+  transition: left 0.5s ease;
+  z-index: 3;
+  pointer-events: none;
+  font-size: 22px;
+  line-height: 1;
+}
+.pixel-guy {
+  display: block;
+  text-align: center;
+}
+
+/* 连续签到 */
+.streak-banner {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 8px; padding: 6px 0;
+  font-size: 13px; font-weight: 600;
+  position: relative; z-index: 1;
+}
+.streak-fire { font-size: 20px; }
+
+/* 道具栏 */
+.item-bar {
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 8px; padding: 5px 10px;
+  background: rgba(255,255,255,0.2); border-radius: 10px;
+  font-size: 11px; position: relative; z-index: 1; flex-wrap: wrap;
+}
+.item-bar .item {
+  display: flex; align-items: center; gap: 3px;
+  background: rgba(255,255,255,0.3); border-radius: 12px;
+  padding: 2px 8px 2px 5px; font-weight: 700; cursor: default; white-space: nowrap;
+}
+.item-bar .item-btn {
+  background: rgba(255,255,255,0.55); border: none; border-radius: 8px;
+  padding: 3px 10px; font-size: 11px; font-weight: 700; cursor: pointer;
+  color: var(--text); transition: 0.15s; white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.item-bar .item-btn:active { background: #fff; transform: scale(0.95); }
+.item-bar .item-btn:disabled { opacity: 0.4; cursor: default; }
+
+/* 卡片 */
+.card { background: var(--card); border-radius: var(--radius); padding: 13px 14px; margin-bottom: 10px; box-shadow: var(--shadow); }
+.card-title { font-size: 15px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.card-title .icon { font-size: 18px; }
+
+/* 编辑按钮 */
+.edit-btn {
+  margin-left: auto; background: none; border: 1.5px solid #ddd;
+  border-radius: 50%; width: 30px; height: 30px; font-size: 15px;
+  cursor: pointer; color: #999; display: flex; align-items: center;
+  justify-content: center; transition: 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.edit-btn:active { border-color: var(--primary); color: var(--primary); }
+
+/* 分类标签 */
+.tabs { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
+.tab {
+  padding: 6px 14px; border-radius: 18px; border: 1.5px solid var(--border);
+  background: #fff; font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: 0.2s; color: var(--text); white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+}
+.tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+.tab:active:not(.active) { background: var(--primary-light); }
+
+/* 任务列表 */
+.task-list { display: flex; flex-direction: column; gap: 5px; }
+.task-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; background: var(--bg); border-radius: 10px;
+  cursor: pointer; user-select: none; transition: 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px; /* 触摸友好 */
+}
+.task-item:active { background: var(--primary-light); }
+.task-item.done { background: #f0fdf0; }
+.task-item.missed { background: #fff0f0; }
+.task-left { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+.task-check {
+  width: 26px; height: 26px; min-width: 26px; border-radius: 50%;
+  border: 2.5px solid #ddd; display: flex; align-items: center;
+  justify-content: center; font-size: 14px; color: transparent;
+  transition: 0.2s; flex-shrink: 0;
+}
+.task-item.done .task-check { background: var(--success); border-color: var(--success); color: #fff; }
+.task-item.missed .task-check { background: var(--danger); border-color: var(--danger); color: #fff; }
+.task-name { font-size: 13px; font-weight: 500; line-height: 1.4; }
+.task-item.done .task-name { color: var(--text-light); text-decoration: line-through; }
+.task-item.missed .task-name { color: var(--danger); }
+.task-note { font-size: 10px; color: var(--text-light); margin-top: 2px; }
+.task-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: 6px; }
+.task-coin { font-size: 12px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.task-item.done .task-coin { color: var(--success); }
+.task-item.missed .task-coin { color: var(--danger); }
+.penalty-badge {
+  font-size: 10px; font-weight: 700; color: #fff; background: var(--danger);
+  border-radius: 8px; padding: 1px 7px; white-space: nowrap;
+}
+
+/* 里程碑 */
+.milestone-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+.ms-item {
+  text-align: center; padding: 8px 2px; border-radius: 10px;
+  background: var(--bg); font-size: 10px; transition: 0.2s;
+}
+.ms-item.reached { background: var(--gold-light); font-weight: 700; cursor: pointer; }
+.ms-item.reached:active { background: #ffe8b0; }
+.ms-item.claimed { background: #e8f5e9; color: #2f9e44; }
+.ms-days { font-size: 15px; font-weight: 800; display: block; }
+.ms-reward { color: var(--gold); font-weight: 700; margin-top: 1px; }
+.ms-name { font-size: 9px; color: var(--text-light); }
+
+/* 成就 */
+.achievement-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.ach-item {
+  display: flex; align-items: center; gap: 6px; padding: 9px 10px;
+  background: var(--bg); border-radius: 10px; font-size: 11px;
+  min-height: 48px;
+}
+.ach-icon { font-size: 24px; flex-shrink: 0; }
+.ach-info { flex: 1; min-width: 0; }
+.ach-name { font-weight: 700; font-size: 12px; }
+.ach-progress { font-size: 10px; color: var(--text-light); margin-top: 2px; }
+.ach-reward { font-size: 11px; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.ach-item.claimed { opacity: 0.5; }
+.ach-item.claimable { background: var(--gold-light); cursor: pointer; }
+.ach-item.claimable:active { background: #ffe8b0; }
+
+/* 礼物 */
+.gift-list { display: flex; flex-direction: column; gap: 5px; }
+.gift-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; background: var(--bg); border-radius: 10px; gap: 8px;
+  min-height: 44px;
+}
+.gift-info { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
+.gift-emoji { font-size: 22px; flex-shrink: 0; }
+.gift-name { font-size: 13px; font-weight: 600; }
+.gift-cost { font-size: 10px; color: var(--text-light); }
+.gift-item.exchanged { opacity: 0.4; }
+.btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 7px 16px; border: none; border-radius: 18px;
+  font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.15s;
+  white-space: nowrap; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active { transform: scale(0.96); }
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:active { background: var(--primary-dark); }
+.btn-outline { background: #fff; color: var(--primary); border: 1.5px solid var(--primary); }
+.btn-outline:active { background: var(--primary-light); }
+.btn-sm { padding: 5px 12px; font-size: 11px; }
+
+/* 弹窗 */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+  z-index: 100; display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.modal {
+  background: #fff; border-radius: var(--radius); padding: 18px;
+  width: 100%; max-width: 380px; max-height: 80vh; overflow-y: auto;
+  box-shadow: 0 8px 36px rgba(0,0,0,0.18);
+  -webkit-overflow-scrolling: touch;
+}
+.modal h3 { font-size: 16px; margin-bottom: 10px; }
+.modal select, .modal input {
+  width: 100%; padding: 9px 10px; border: 1.5px solid var(--border);
+  border-radius: 8px; font-size: 13px; margin-bottom: 8px;
+  -webkit-appearance: none;
+}
+.modal .btn { width: 100%; margin-top: 6px; }
+
+/* Toast */
+.toast {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  background: #333; color: #fff; padding: 10px 24px; border-radius: 24px;
+  font-size: 13px; z-index: 200; animation: fadeInOut 2s ease forwards;
+  white-space: nowrap; pointer-events: none;
+}
+@keyframes fadeInOut {
+  0% { opacity:0; top:-20px; } 15% { opacity:1; top:20px; } 85% { opacity:1; top:20px; } 100% { opacity:0; top:-20px; }
+}
+
+/* 宝箱 */
+.treasure-card { position: relative; }
+.treasure-box {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: 16px; border-radius: 12px; margin-top: 8px;
+  transition: 0.3s; cursor: pointer; user-select: none; min-height: 60px;
+  -webkit-tap-highlight-color: transparent;
+}
+.treasure-box.locked {
+  background: var(--bg); color: var(--text-light); cursor: default;
+}
+.treasure-box.unlocked {
+  background: linear-gradient(135deg, #fff8e1, #ffe0b2);
+  color: #e65100; font-weight: 700; cursor: pointer;
+  box-shadow: 0 0 18px rgba(255,160,0,0.3);
+}
+.treasure-box.unlocked:active { box-shadow: 0 0 28px rgba(255,160,0,0.5); }
+.treasure-box.opened {
+  background: var(--bg); color: var(--text-light); cursor: default;
+}
+.treasure-icon { font-size: 40px; line-height: 1; }
+.treasure-box.unlocked .treasure-icon { animation: treasureBounce 1s infinite alternate; }
+@keyframes treasureBounce {
+  0% { transform: scale(1) rotate(-5deg); }
+  100% { transform: scale(1.15) rotate(5deg); }
+}
+.treasure-status { font-size: 13px; }
+.treasure-hint { font-size: 10px; color: var(--text-light); margin-top: 6px; }
+
+/* 宝箱开启动画 */
+.treasure-open-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+  z-index: 300; display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { 0%{opacity:0} 100%{opacity:1} }
+.treasure-open-box {
+  font-size: 80px; animation: boxShake 0.6s ease, boxOpen 0.4s ease 0.6s forwards;
+  filter: drop-shadow(0 0 20px gold);
+}
+@keyframes boxShake {
+  0%,100% { transform: rotate(0deg); }
+  20% { transform: rotate(-10deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: rotate(-10deg); }
+  80% { transform: rotate(10deg); }
+}
+@keyframes boxOpen {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* 抽奖结果弹窗 */
+.lottery-modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  z-index: 400; display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.3s ease; padding: 16px;
+}
+.lottery-modal {
+  background: #fff; border-radius: 20px; padding: 24px 20px;
+  width: 100%; max-width: 330px; text-align: center;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+  animation: popIn 0.4s ease;
+}
+@keyframes popIn {
+  0% { transform: scale(0.7); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.lottery-modal .prize-emoji { font-size: 50px; margin-bottom: 8px; }
+.lottery-modal .prize-name { font-size: 19px; font-weight: 800; margin-bottom: 6px; }
+.lottery-modal .prize-desc { font-size: 13px; color: var(--text-light); margin-bottom: 14px; }
+.lottery-modal .prize-card {
+  display: inline-block; background: var(--gold-light); border: 2px solid var(--gold);
+  border-radius: 12px; padding: 6px 16px; font-size: 14px; font-weight: 700;
+  color: var(--gold); margin-bottom: 10px;
+}
+.lottery-modal .encourage-text {
+  font-size: 16px; font-weight: 700; color: var(--primary);
+  margin: 10px 0; line-height: 1.6;
+}
+.lottery-modal .btn { min-width: 100px; }
+
+/* 双倍卡 / 免做卡选择弹窗 */
+.double-select-overlay, .skip-select-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+  z-index: 200; display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+.double-select-modal, .skip-select-modal {
+  background: #fff; border-radius: var(--radius); padding: 18px;
+  width: 100%; max-width: 360px; max-height: 70vh; overflow-y: auto;
+  box-shadow: 0 8px 36px rgba(0,0,0,0.18);
+  -webkit-overflow-scrolling: touch;
+}
+.double-select-modal h3, .skip-select-modal h3 { font-size: 15px; margin-bottom: 10px; }
+.double-task-item, .skip-task-item {
+  padding: 11px 12px; background: var(--bg); border-radius: 10px;
+  margin-bottom: 5px; cursor: pointer; font-size: 13px; font-weight: 500;
+  transition: 0.15s; min-height: 44px; display: flex; align-items: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.double-task-item:active, .skip-task-item:active { background: var(--primary-light); }
+.double-task-item.doubled { background: #fff8e1; color: var(--gold); font-weight: 700; }
+.skip-task-item.done { background: #f0fdf0; color: var(--success); text-decoration: line-through; }
+
+.footer { text-align: center; padding: 16px; color: var(--text-light); font-size: 11px; }
+.footer button { background: none; border: none; color: #bbb; font-size: 11px; text-decoration: underline; cursor: pointer; padding: 4px 8px; }
+.footer button:active { color: var(--danger); }
+
+/* ━━━ 响应式强化 ━━━ */
+
+/* PAD (768px+) */
+@media (min-width: 768px) {
+  .container { padding: 16px 20px 50px; }
+  .header { padding: 22px 24px; }
+  .header h1 { font-size: 24px; }
+  .coin-big { font-size: 42px; }
+  .card { padding: 18px 20px; }
+  .card-title { font-size: 17px; }
+  .task-item { padding: 11px 14px; }
+  .task-check { width: 28px; height: 28px; font-size: 15px; }
+  .task-name { font-size: 14px; }
+  .tab { font-size: 13px; padding: 7px 16px; }
+  .achievement-grid { grid-template-columns: repeat(3, 1fr); }
+  .milestone-grid { gap: 6px; }
+  .ms-item { padding: 10px 4px; font-size: 11px; }
+  .ms-days { font-size: 17px; }
+  .ms-name { font-size: 10px; }
+}
+
+/* 小屏手机 (<= 380px) */
+@media (max-width: 380px) {
+  .container { padding: 6px 6px 40px; }
+  .header { padding: 12px 14px; border-radius: 12px; }
+  .header h1 { font-size: 15px; }
+  .coin-big { font-size: 26px; }
+  .coin-label { font-size: 10px; }
+  .today-earn { font-size: 11px; }
+  .today-earn b { font-size: 16px; }
+  .level-badge { font-size: 10px; padding: 3px 10px; }
+  .card { padding: 10px 12px; border-radius: 12px; }
+  .card-title { font-size: 13px; }
+  .tab { font-size: 10px; padding: 4px 9px; }
+  .task-item { padding: 8px 10px; min-height: 38px; }
+  .task-check { width: 22px; height: 22px; min-width: 22px; font-size: 12px; border-width: 2px; }
+  .task-name { font-size: 11px; }
+  .task-coin { font-size: 10px; }
+  .penalty-badge { font-size: 9px; padding: 1px 5px; }
+  .achievement-grid { grid-template-columns: 1fr; }
+  .milestone-grid { grid-template-columns: repeat(3, 1fr); }
+  .ms-item { padding: 6px 2px; }
+  .ms-days { font-size: 13px; }
+  .item-bar { gap: 4px; font-size: 10px; }
+  .item-bar .item { padding: 1px 6px; font-size: 10px; }
+  .item-bar .item-btn { font-size: 10px; padding: 2px 7px; }
+  .gift-item { padding: 8px 10px; }
+  .gift-emoji { font-size: 18px; }
+  .gift-name { font-size: 11px; }
+  .btn { font-size: 10px; padding: 5px 10px; }
+  .btn-sm { font-size: 10px; padding: 4px 8px; }
+  .treasure-icon { font-size: 32px; }
+  .treasure-status { font-size: 12px; }
+  .modal, .double-select-modal, .skip-select-modal { padding: 14px; max-height: 78vh; }
+  .modal h3, .double-select-modal h3, .skip-select-modal h3 { font-size: 14px; }
+  .lottery-modal { padding: 20px 16px; }
+  .lottery-modal .prize-emoji { font-size: 40px; }
+  .lottery-modal .prize-name { font-size: 16px; }
+}
+
+/* 中等手机 (381px - 480px) */
+@media (min-width: 381px) and (max-width: 480px) {
+  .header h1 { font-size: 17px; }
+  .coin-big { font-size: 30px; }
+  .tab { font-size: 11px; padding: 5px 10px; }
+  .task-name { font-size: 12px; }
+  .task-item { padding: 9px 10px; }
+  .achievement-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* iPhone X+ 安全区适配 */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .container { padding-bottom: calc(50px + env(safe-area-inset-bottom)); }
+  .footer { padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+  .toast { top: calc(20px + env(safe-area-inset-top)); }
+}
+</style>
+<script src="https://beacon.cdn.qq.com/sdk/4.5.9/beacon_web.min.js"></script>
+<script>
+(function(){
+  try{
+    var beacon=new BeaconAction({
+      appkey:'0WEB06U85YBSLJNL',
+      versionCode:'1.0.0',
+      channelID:'share',
+      delay:1000,
+      sessionDuration:30*60*1000,
+      isOversea:false,
+      needReportRqdEvent:false
+    });
+    beacon.onDirectUserAction('preview_page_view',{
+      'url':location.href,
+      'referrer':document.referrer,
+      'title':document.title,
+      'sandbox_id':'545614289e814d96a5920082ddae7ef6'
+    });
+  }catch(e){}
+})();
+</script></head>
+<body>
+<div class="container">
+
+  <!-- 头部 -->
+  <div class="header" id="header">
+    <div class="header-top">
+      <h1>⚔️ 豆豆的暑期大作战</h1>
+      <span class="level-badge" id="levelBadge">Lv1 小勇士</span>
+    </div>
+    <div class="coin-row">
+      <div>
+        <div class="coin-big" id="totalCoins">0</div>
+        <div class="coin-label">⭐ 成长币</div>
+      </div>
+      <div class="today-earn">
+        今日获得<br><b id="todayEarn">0</b> ⭐
+      </div>
+    </div>
+    <div class="level-progress">
+      <span id="levelLabel">Lv1</span>
+      <div class="bar-bg"><div class="bar-fill" id="levelBar" style="width:0%"></div><div class="pixel-guy-wrap" id="pixelGuyWrap"><div class="pixel-guy">🏃🏻‍♂️</div></div></div>
+      <span id="levelNext">Lv2</span>
+    </div>
+    <div class="streak-banner" id="streakBanner">
+      <span class="streak-fire">🔥</span>
+      <span>连续签到 <b id="streakDays">0</b> 天</span>
+    </div>
+    <div class="item-bar" id="itemBar">
+      <span class="item">🃏 双倍卡 ×<b id="itemDoubleCard">0</b></span>
+      <button class="item-btn" id="btnUseDouble" onclick="useDoubleCard()" disabled>使用</button>
+      <span class="item">🎫 免做卡 ×<b id="itemSkipCard">0</b></span>
+      <button class="item-btn" id="btnUseSkip" onclick="useSkipCard()" disabled>使用</button>
+      <span class="item">🛡️ 免罚卡 ×<b id="itemImmunityCard">0</b></span>
+      <button class="item-btn" id="btnUseImmunity" onclick="useImmunityCard()" disabled>使用</button>
+    </div>
+  </div>
+
+  <!-- 今日任务 -->
+  <div class="card">
+    <div class="card-title">
+      <span class="icon">📋</span>今日任务
+      <span style="font-weight:400;color:var(--text-light);font-size:12px" id="todayDate"></span>
+      <button class="edit-btn" onclick="showTaskEditor()" title="编辑任务">⚙️</button>
+    </div>
+    <div class="tabs" id="taskTabs"></div>
+    <div class="task-list" id="taskList"></div>
+    <div style="margin-top:8px;font-size:10px;color:var(--text-light);text-align:center">
+      💡 点击任务：未操作 → 完成(+分) → 未完成(扣分) → 还原
+    </div>
+  </div>
+
+  <!-- 签到里程碑 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🏆</span>签到里程碑</div>
+    <div class="milestone-grid" id="milestoneGrid"></div>
+    <div style="margin-top:6px;font-size:10px;color:var(--text-light)">每天获得 ≥20 分即签到成功，达到里程碑自动获得奖励。</div>
+  </div>
+
+  <!-- 每日宝箱 -->
+  <div class="card treasure-card">
+    <div class="card-title"><span class="icon">🎁</span>每日宝箱</div>
+    <div class="treasure-box locked" id="treasureBox" onclick="openTreasure()">
+      <span class="treasure-icon">🎁</span>
+      <div>
+        <div class="treasure-status" id="treasureStatus">今日还需 <b id="treasureNeed">25</b> ⭐ 解锁宝箱</div>
+      </div>
+    </div>
+    <div class="treasure-hint">每天获得≥25⭐可开启宝箱，每天限1次，随机获得道具或鼓励</div>
+  </div>
+
+  <!-- 成就 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🎖️</span>成就徽章</div>
+    <div class="achievement-grid" id="achievementGrid"></div>
+  </div>
+
+  <!-- 礼物商城 -->
+  <div class="card">
+    <div class="card-title"><span class="icon">🛒</span>礼物商城
+      <button class="edit-btn" onclick="showGiftEditor()" title="编辑礼物">⚙️</button>
+    </div>
+    <div class="gift-list" id="giftList"></div>
+    <div style="margin-top:8px;text-align:center">
+      <button class="btn btn-outline btn-sm" onclick="addCustomGift()">+ 添加自定义礼物</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    豆豆的暑期大作战 · 2026 ｜ <button onclick="resetAll()">重置数据</button>
+  </div>
+
+</div>
+
+<!-- 任务编辑器弹窗 -->
+<div class="modal-overlay" id="taskEditorOverlay" style="display:none" onclick="closeTaskEditor(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>⚙️ 编辑任务</h3>
+    <div id="taskEditorContent"></div>
+    <button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="addNewTask()">+ 添加新任务</button>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="closeTaskEditor()">完成</button>
+  </div>
+</div>
+
+<!-- 礼物编辑器弹窗 -->
+<div class="modal-overlay" id="giftEditorOverlay" style="display:none" onclick="closeGiftEditor(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3>🎁 编辑礼物</h3>
+    <div id="giftEditorContent"></div>
+    <button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="addNewGift()">+ 添加新礼物</button>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="closeGiftEditor()">完成</button>
+  </div>
+</div>
+
+<!-- 抽奖结果弹窗 -->
+<div class="lottery-modal-overlay" id="lotteryModalOverlay" style="display:none" onclick="closeLotteryModal(event)">
+  <div class="lottery-modal" onclick="event.stopPropagation()">
+    <div class="prize-emoji" id="prizeEmoji">🎉</div>
+    <div class="prize-name" id="prizeName">恭喜！</div>
+    <div class="prize-desc" id="prizeDesc"></div>
+    <div class="prize-card" id="prizeCard" style="display:none"></div>
+    <div class="encourage-text" id="prizeEncourage" style="display:none"></div>
+    <button class="btn btn-primary" onclick="closeLotteryModal()">太棒了！</button>
+  </div>
+</div>
+
+<!-- 双倍卡选择任务弹窗 -->
+<div class="double-select-overlay" id="doubleSelectOverlay" style="display:none" onclick="closeDoubleSelect(event)">
+  <div class="double-select-modal" onclick="event.stopPropagation()">
+    <h3>🃏 选择要翻倍的任务（当日得分×2）</h3>
+    <div id="doubleTaskList"></div>
+    <button class="btn btn-outline" style="width:100%;margin-top:10px" onclick="closeDoubleSelect()">取消</button>
+  </div>
+</div>
+
+<!-- 免做卡选择任务弹窗 -->
+<div class="skip-select-overlay" id="skipSelectOverlay" style="display:none" onclick="closeSkipSelect(event)">
+  <div class="skip-select-modal" onclick="event.stopPropagation()">
+    <h3>🎫 选择要免做的任务（自动标记完成）</h3>
+    <div id="skipTaskList"></div>
+    <button class="btn btn-outline" style="width:100%;margin-top:10px" onclick="closeSkipSelect()">取消</button>
+  </div>
+</div>
+
+<script>
+// ==================== 数据重置（仅首次） ====================
+(function() {
+  if (!localStorage.getItem('qiuqiu_reset_flag')) {
+    localStorage.removeItem('qiuqiu_summer_battle_v1');
+    localStorage.setItem('qiuqiu_reset_flag', 'true');
+  }
+})();
+
+// ==================== 数据定义 ====================
+
+const DEFAULT_TASK_GROUPS = {
+  study: {
+    emoji: '📚', label: '学习',
+    tasks: [
+      { id:'writing', name:'练字15分钟（注意坐姿和笔顺）', coin:1, penalty:0 },
+      { id:'reading', name:'课外阅读20分钟', coin:1, penalty:0 },
+      { id:'poem', name:'古诗词背诵（10分钟，熟读1首）', coin:1, penalty:0 },
+      { id:'pinyin', name:'拼音复习10分钟', coin:1, penalty:0 },
+      { id:'mathcalc', name:'数学口算1页（10分钟）', coin:1, penalty:0 },
+      { id:'math2', name:'九九乘法表背诵练习', coin:1, penalty:0 },
+      { id:'english_basic', name:'英语磨耳朵（听儿歌或动画15分钟）', coin:1, penalty:0 },
+      { id:'summer_hw', name:'暑假作业1页', coin:1, penalty:0 },
+    ],
+  },
+  sport: {
+    emoji: '💪', label: '运动',
+    tasks: [
+      { id:'jump_rope', name:'跳绳（目标100个）', coin:1, penalty:0 },
+      { id:'sit_reach', name:'坐位体前屈练习', coin:1, penalty:0 },
+      { id:'outdoor', name:'户外活动30分钟', coin:1, penalty:0 },
+      { id:'ball', name:'球类运动（篮球/足球/羽毛球）', coin:1, penalty:0 },
+    ],
+  },
+  life: {
+    emoji: '🏠', label: '生活',
+    tasks: [
+      { id:'wake_early', name:'8:00前起床', coin:1, penalty:0, note:'睡晚了不得分' },
+      { id:'desk_tidy', name:'书桌收拾整齐（睡前检查）', coin:1, penalty:1 },
+      { id:'toy_tidy', name:'玩具/游戏区收拾整齐', coin:1, penalty:1 },
+      { id:'brush_teeth', name:'早晚刷牙（吃完饭也要漱口）', coin:1, penalty:1 },
+      { id:'housework', name:'帮做一件家务', coin:1, penalty:0 },
+      { id:'dirty_clothes', name:'脏衣服放洗衣篮', coin:1, penalty:0 },
+      { id:'turn_off_light', name:'人走关灯关风扇', coin:1, penalty:0 },
+      { id:'sleep_early', name:'21:00前睡觉', coin:1, penalty:1 },
+    ],
+  },
+  habit: {
+    emoji: '😊', label: '好习惯',
+    tasks: [
+      { id:'eyesight', name:'远眺保护眼睛（用眼30分钟后）', coin:1, penalty:0 },
+      { id:'no_tantrum', name:'不乱发脾气，好好说话', coin:1, penalty:0 },
+      { id:'polite', name:'礼貌用语（谢谢/请/对不起）', coin:1, penalty:0 },
+      { id:'clean_plate', name:'光盘行动（不浪费粮食）', coin:1, penalty:0 },
+      { id:'screen_time', name:'看屏幕不超过1小时（除学习外）', coin:1, penalty:1 },
+      { id:'obey_parents', name:'听爸爸妈妈的话', coin:1, penalty:1 },
+    ],
+  },
+};
+
+// 可变任务配置
+let TASK_GROUPS = JSON.parse(JSON.stringify(DEFAULT_TASK_GROUPS));
+
+function loadTaskConfig() {
+  const d = loadData();
+  if (d.taskConfig) {
+    for (const gid of Object.keys(DEFAULT_TASK_GROUPS)) {
+      if (d.taskConfig[gid] && d.taskConfig[gid].tasks) {
+        TASK_GROUPS[gid].tasks = JSON.parse(JSON.stringify(d.taskConfig[gid].tasks));
+      }
+    }
+  }
+}
+
+function saveTaskConfig() {
+  const d = loadData();
+  d.taskConfig = {};
+  for (const gid of Object.keys(TASK_GROUPS)) {
+    d.taskConfig[gid] = { tasks: JSON.parse(JSON.stringify(TASK_GROUPS[gid].tasks)) };
+  }
+  saveData(d);
+}
+
+const LEVELS = [
+  { lv:1, name:'小勇士', min:0, max:30 },
+  { lv:2, name:'冒险家', min:30, max:90 },
+  { lv:3, name:'小战士', min:90, max:200 },
+  { lv:4, name:'骑士', min:200, max:380 },
+  { lv:5, name:'大英雄', min:380, max:650 },
+  { lv:6, name:'传说勇士', min:650, max:99999 },
+];
+
+const STREAK_MILESTONES = [
+  { days:3, reward:10, emoji:'🌟', name:'初露锋芒' },
+  { days:7, reward:25, emoji:'🔥', name:'坚持一周' },
+  { days:14, reward:40, emoji:'💪', name:'持之以恒' },
+  { days:21, reward:60, emoji:'🎯', name:'习惯养成' },
+  { days:30, reward:90, emoji:'👑', name:'自律王者' },
+  { days:60, reward:120, emoji:'🏆', name:'超强毅力' },
+];
+
+const ACHIEVEMENTS = [
+  { id:'study_master', icon:'📖', name:'学习达人', desc:'累计完成学习任务480次', target:480, unit:'次', reward:30 },
+  { id:'sport_master', icon:'⚽', name:'运动达人', desc:'累计完成运动任务100次', target:100, unit:'次', reward:30 },
+  { id:'life_master', icon:'🧹', name:'生活小能手', desc:'累计完成生活任务500次', target:500, unit:'次', reward:40 },
+  { id:'habit_master', icon:'🌟', name:'好习惯之星', desc:'累计完成好习惯任务120次', target:120, unit:'次', reward:40 },
+  { id:'full', icon:'🏅', name:'满勤王', desc:'累计签到满60天', target:60, unit:'天', reward:100 },
+];
+
+const DEFAULT_GIFTS = [
+  { id:'g1', name:'冰淇淋/小零食', cost:90, emoji:'🍦' },
+  { id:'g2', name:'看一场电影', cost:150, emoji:'🎬' },
+  { id:'g3', name:'喜欢的玩具（百元内）', cost:200, emoji:'🎮' },
+  { id:'g4', name:'乐高积木', cost:400, emoji:'🧩' },
+  { id:'g5', name:'电话手表', cost:600, emoji:'⌚' },
+  { id:'g6', name:'游乐园一日游', cost:900, emoji:'🏰' },
+];
+
+const STORAGE_KEY = 'qiuqiu_summer_battle_v1';
+const SUMMER_START = '2026-07-01';
+const SUMMER_END = '2026-08-31';
+const STREAK_MIN_SCORE = 20;
+const TREASURE_MIN_SCORE = 25;
+const TREASURE_REWARDS = [
+  { name:'双倍卡', emoji:'🃏', desc:'当日可选一项任务获得双倍积分', weight:6, type:'double' },
+  { name:'免做卡', emoji:'🎫', desc:'选择一项任务自动标记为已完成', weight:10, type:'skip' },
+  { name:'免罚卡', emoji:'🛡️', desc:'抵消一次扣分', weight:20, type:'immunity' },
+  { name:'明天也要加油哦', emoji:'💪', desc:'可爱的鼓励语', weight:64, type:'encourage' },
+];
+
+// ==================== 数据读写 ====================
+
+function defaultData() {
+  return { tasks: {}, gifts: {}, customGifts: [], streakMilestones: {}, achievements: {}, items: { doubleCard:0, skipCard:0, immunityCard:0 }, treasureOpened: {}, taskDouble: {} };
+}
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const d = JSON.parse(raw);
+      if (!d.streakMilestones) d.streakMilestones = {};
+      if (!d.achievements) d.achievements = {};
+      if (!d.customGifts) d.customGifts = [];
+      if (!d.gifts) d.gifts = {};
+      if (!d.giftConfig) d.giftConfig = {};
+      if (!d.items) d.items = { doubleCard:0, skipCard:0, immunityCard:0 };
+      if (!d.treasureOpened) d.treasureOpened = {};
+      if (!d.taskDouble) d.taskDouble = {};
+      return d;
+    }
+  } catch(e) {}
+  return defaultData();
+}
+
+function saveData(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function getDayTasks(dateStr) {
+  const d = loadData();
+  return d.tasks[dateStr] || {};
+}
+
+// ==================== 计算引擎 ====================
+
+function getAllTasks() {
+  const all = [];
+  for (const [gid, group] of Object.entries(TASK_GROUPS)) {
+    for (const t of group.tasks) {
+      all.push({ ...t, group: gid });
+    }
+  }
+  return all;
+}
+
+function calcStreak() {
+  const d = loadData();
+  const today = getToday();
+  let streak = 0;
+  let cur = new Date(today);
+  cur.setDate(cur.getDate() + 1);
+
+  while (true) {
+    cur.setDate(cur.getDate() - 1);
+    const ds = formatDate(cur);
+    if (ds < SUMMER_START) break;
+    const dayTasks = d.tasks[ds] || {};
+    const allTasks = getAllTasks();
+    let dayScore = 0;
+    for (const t of allTasks) {
+      if (dayTasks[t.id] === true) dayScore += t.coin;
+      else if (dayTasks[t.id] === 'missed' && t.penalty > 0) dayScore -= t.penalty;
+    }
+    if (dayScore >= STREAK_MIN_SCORE) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+function calcTotalCoins() {
+  const d = loadData();
+  let total = 0;
+  let todayEarn = 0;
+  const today = getToday();
+  const allTasks = getAllTasks();
+
+  const summerStart = new Date(SUMMER_START);
+  const summerEnd = new Date(SUMMER_END);
+  const todayDate = new Date(today);
+  const calcStart = todayDate < summerStart ? todayDate : summerStart;
+  const calcEnd = todayDate > summerEnd ? todayDate : summerEnd;
+
+  for (let cur = new Date(calcStart); cur <= calcEnd; cur.setDate(cur.getDate() + 1)) {
+    const ds = formatDate(cur);
+    const dayTasks = d.tasks[ds] || {};
+    for (const t of allTasks) {
+      if (dayTasks[t.id] === true) {
+        let addCoin = t.coin;
+        if (d.taskDouble && d.taskDouble[ds] && d.taskDouble[ds][t.id]) {
+          addCoin = t.coin * 2;
+        }
+        total += addCoin;
+        if (ds === today) todayEarn += addCoin;
+      } else if (dayTasks[t.id] === 'missed' && t.penalty > 0) {
+        total -= t.penalty;
+        if (ds === today) todayEarn -= t.penalty;
+      }
+    }
+  }
+
+  for (const ms of STREAK_MILESTONES) {
+    if (d.streakMilestones[ms.days] === 'claimed') total += ms.reward;
+  }
+  for (const ach of ACHIEVEMENTS) {
+    if (d.achievements[ach.id] === 'claimed') total += ach.reward;
+  }
+  return { total, todayEarn };
+}
+
+function getLevel(coins) {
+  for (const lv of LEVELS) {
+    if (coins >= lv.min && coins < lv.max) return lv;
+  }
+  return LEVELS[LEVELS.length - 1];
+}
+
+function getStats() {
+  const d = loadData();
+  const allTasks = getAllTasks();
+  let studyCount = 0, sportCount = 0, lifeCount = 0, habitCount = 0;
+  let maxStreak = calcStreak();
+  const today = getToday();
+  const summerStart = new Date(SUMMER_START);
+  const todayDate = new Date(today);
+  const calcStart = todayDate < summerStart ? todayDate : summerStart;
+
+  for (let cur = new Date(calcStart); cur <= todayDate; cur.setDate(cur.getDate() + 1)) {
+    const ds = formatDate(cur);
+    const dayTasks = d.tasks[ds] || {};
+    for (const t of allTasks) {
+      if (dayTasks[t.id] !== true) continue;
+      if (t.group === 'study') studyCount++;
+      else if (t.group === 'sport') sportCount++;
+      else if (t.group === 'life') lifeCount++;
+      else if (t.group === 'habit') habitCount++;
+    }
+  }
+  return { studyCount, sportCount, lifeCount, habitCount, maxStreak };
+}
+
+const ACHIEVEMENT_STAT_MAP = {
+  'study_master': 'studyCount',
+  'sport_master': 'sportCount',
+  'life_master': 'lifeCount',
+  'habit_master': 'habitCount',
+  'full': 'maxStreak',
+};
+
+// ==================== 辅助函数 ====================
+
+function formatDate(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+function getToday() { return formatDate(new Date()); }
+
+// ==================== UI 渲染 ====================
+
+let currentTab = 'study';
+
+function renderAll() {
+  renderHeader();
+  renderTabs();
+  renderTasks();
+  renderMilestones();
+  renderAchievements();
+  renderGifts();
+  renderTreasure();
+  renderItems();
+}
+
+function renderHeader() {
+  const coins = calcTotalCoins();
+  const lv = getLevel(coins.total);
+  const streak = calcStreak();
+  const today = getToday();
+
+  document.getElementById('totalCoins').textContent = coins.total;
+  document.getElementById('todayEarn').textContent = coins.todayEarn;
+  document.getElementById('levelBadge').textContent = `Lv${lv.lv} ${lv.name}`;
+  document.getElementById('levelLabel').textContent = `Lv${lv.lv}`;
+  document.getElementById('streakDays').textContent = streak;
+
+  const lvRange = lv.max - lv.min;
+  const lvProgress = coins.total - lv.min;
+  const pct = Math.min(100, Math.max(0, Math.round((lvProgress / lvRange) * 100)));
+  document.getElementById('levelBar').style.width = pct + '%';
+  document.getElementById('pixelGuyWrap').style.left = pct + '%';
+
+  const nextIdx = LEVELS.findIndex(l => l.lv === lv.lv);
+  const nextLv = nextIdx < LEVELS.length - 1 ? LEVELS[nextIdx + 1] : null;
+  document.getElementById('levelNext').textContent = nextLv ? `Lv${nextLv.lv}` : 'MAX';
+  document.getElementById('todayDate').textContent = today;
+}
+
+function renderTabs() {
+  let html = '';
+  for (const [gid, group] of Object.entries(TASK_GROUPS)) {
+    html += `<span class="tab ${gid === currentTab ? 'active' : ''}" onclick="switchTab('${gid}')">${group.emoji} ${group.label}</span>`;
+  }
+  document.getElementById('taskTabs').innerHTML = html;
+}
+
+function switchTab(gid) {
+  currentTab = gid;
+  renderTabs();
+  renderTasks();
+}
+
+function renderTasks() {
+  const today = getToday();
+  const dayTasks = getDayTasks(today);
+  const group = TASK_GROUPS[currentTab];
+  let html = '';
+
+  for (const t of group.tasks) {
+    const state = dayTasks[t.id];
+    let cls = '';
+    let checkText = '';
+    let coinDisplay = '+'+t.coin+'⭐';
+    let penaltyHtml = '';
+
+    if (state === true) {
+      cls = 'done';
+      checkText = '✓';
+    } else if (state === 'missed') {
+      cls = 'missed';
+      checkText = '✗';
+      coinDisplay = '-'+t.penalty+'⭐';
+    }
+
+    if (t.penalty > 0 && state !== 'missed') {
+      penaltyHtml = '<span class="penalty-badge">扣-'+t.penalty+'</span>';
+    }
+
+    html += `
+      <div class="task-item ${cls}" onclick="toggleTask('${today}','${t.id}')">
+        <div class="task-left">
+          <div class="task-check">${checkText}</div>
+          <div>
+            <span class="task-name">${t.name}</span>
+            ${t.note ? '<div class="task-note">'+escapeHtml(t.note)+'</div>' : ''}
+          </div>
+        </div>
+        <div class="task-right">
+          ${penaltyHtml}
+          <span class="task-coin">${coinDisplay}</span>
+        </div>
+      </div>`;
+  }
+  document.getElementById('taskList').innerHTML = html;
+}
+
+function renderMilestones() {
+  const streak = calcStreak();
+  const d = loadData();
+  let html = '';
+  for (const ms of STREAK_MILESTONES) {
+    let cls = 'ms-item';
+    let label = ms.reward+'⭐';
+    if (d.streakMilestones[ms.days] === 'claimed') {
+      cls += ' claimed';
+      label = '已领取';
+    } else if (streak >= ms.days) {
+      cls += ' reached';
+      label = '可领取';
+    }
+    html += `
+      <div class="${cls}" ${cls.includes('reached') ? `onclick="claimStreak(${ms.days})"` : ''}>
+        <span class="ms-days">${ms.emoji}</span>
+        <span style="font-size:12px;font-weight:700">${ms.days}天</span>
+        <div class="ms-reward">${label}</div>
+        <div class="ms-name">${ms.name}</div>
+      </div>`;
+  }
+  document.getElementById('milestoneGrid').innerHTML = html;
+}
+
+function renderAchievements() {
+  const d = loadData();
+  const stats = getStats();
+  let html = '';
+  for (const ach of ACHIEVEMENTS) {
+    const statKey = ACHIEVEMENT_STAT_MAP[ach.id];
+    const val = stats[statKey] || 0;
+    const pct = Math.min(100, Math.round((val / ach.target) * 100));
+    let cls = 'ach-item';
+    let action = '';
+    if (d.achievements[ach.id] === 'claimed') {
+      cls += ' claimed';
+    } else if (val >= ach.target) {
+      cls += ' claimable';
+      action = `onclick="claimAchievement('${ach.id}')"`;
+    }
+    html += `
+      <div class="${cls}" ${action}>
+        <span class="ach-icon">${ach.icon}</span>
+        <div class="ach-info">
+          <div class="ach-name">${ach.name}</div>
+          <div class="ach-progress">${Math.min(val, ach.target)}/${ach.target}${ach.unit} (${pct}%)</div>
+        </div>
+        <span class="ach-reward">+${ach.reward}⭐</span>
+      </div>`;
+  }
+  document.getElementById('achievementGrid').innerHTML = html;
+}
+
+function renderGifts() {
+  const d = loadData();
+  const coins = calcTotalCoins();
+  const allGifts = [...DEFAULT_GIFTS, ...(d.customGifts || [])].filter(g => !g.hidden);
+  let html = '';
+  for (const g of allGifts) {
+    const exchanged = d.gifts[g.id] === true;
+    const canExchange = coins.total >= g.cost && !exchanged;
+    html += `
+      <div class="gift-item ${exchanged ? 'exchanged' : ''}">
+        <div class="gift-info">
+          <span class="gift-emoji">${g.emoji}</span>
+          <div>
+            <div class="gift-name">${g.name}</div>
+            <div class="gift-cost">需要 ${g.cost} ⭐</div>
+          </div>
+        </div>
+        <button class="btn btn-sm ${canExchange ? 'btn-primary' : 'btn-outline'}"
+          ${!canExchange && !exchanged ? 'disabled' : ''}
+          onclick="${exchanged ? '' : `exchangeGift('${g.id}')`}">
+          ${exchanged ? '已兑换 ✓' : (canExchange ? '兑换' : '不够')}
+        </button>
+      </div>`;
+  }
+  document.getElementById('giftList').innerHTML = html;
+}
+
+// ==================== 交互 ====================
+
+function toggleTask(dateStr, taskId) {
+  const d = loadData();
+  if (!d.tasks[dateStr]) d.tasks[dateStr] = {};
+
+  const allTasks = getAllTasks();
+  const t = allTasks.find(x => x.id === taskId);
+  if (!t) return;
+
+  const current = d.tasks[dateStr][taskId];
+  let nextState;
+  let msg = '';
+
+  if (current === undefined || current === null) {
+    nextState = true;
+    msg = `✅ 完成！+${t.coin}⭐`;
+  } else if (current === true) {
+    if (t.penalty > 0) {
+      nextState = 'missed';
+      msg = `⚠️ 标记未完成 -${t.penalty}⭐`;
+    } else {
+      nextState = undefined;
+      msg = '已撤销';
+    }
+  } else if (current === 'missed') {
+    nextState = undefined;
+    msg = '已撤销扣分';
+  }
+
+  if (nextState === undefined) {
+    delete d.tasks[dateStr][taskId];
+  } else {
+    d.tasks[dateStr][taskId] = nextState;
+  }
+
+  saveData(d);
+  showToast(msg);
+  renderAll();
+}
+
+function claimStreak(days) {
+  const d = loadData();
+  if (d.streakMilestones[days] === 'claimed') return;
+  d.streakMilestones[days] = 'claimed';
+  const ms = STREAK_MILESTONES.find(x => x.days === days);
+  saveData(d);
+  showToast(`🎉 达成「${ms.name}」！+${ms.reward}⭐`);
+  renderAll();
+}
+
+function claimAchievement(id) {
+  const d = loadData();
+  if (d.achievements[id] === 'claimed') return;
+  d.achievements[id] = 'claimed';
+  const ach = ACHIEVEMENTS.find(x => x.id === id);
+  saveData(d);
+  showToast(`🏅 获得「${ach.name}」徽章！+${ach.reward}⭐`);
+  renderAll();
+}
+
+function exchangeGift(giftId) {
+  const d = loadData();
+  if (d.gifts[giftId]) return;
+  d.gifts[giftId] = true;
+  saveData(d);
+  const allGifts = [...DEFAULT_GIFTS, ...(d.customGifts || [])];
+  const g = allGifts.find(x => x.id === giftId);
+  showToast(`🎁 兑换成功：「${g.name}」！`);
+  renderAll();
+}
+
+// ==================== 宝箱与道具 ====================
+
+function getTodayScore() {
+  const d = loadData();
+  const today = getToday();
+  const dayTasks = d.tasks[today] || {};
+  const allTasks = getAllTasks();
+  let score = 0;
+  for (const t of allTasks) {
+    if (dayTasks[t.id] === true) score += t.coin;
+    else if (dayTasks[t.id] === 'missed' && t.penalty > 0) score -= t.penalty;
+  }
+  return score;
+}
+
+function isTreasureOpened() {
+  const d = loadData();
+  return !!d.treasureOpened[getToday()];
+}
+
+function renderTreasure() {
+  const score = getTodayScore();
+  const opened = isTreasureOpened();
+  const box = document.getElementById('treasureBox');
+  const status = document.getElementById('treasureStatus');
+
+  box.className = 'treasure-box';
+  if (opened) {
+    box.classList.add('opened');
+    box.onclick = null;
+    status.innerHTML = '今日已开启 ✅';
+  } else if (score >= TREASURE_MIN_SCORE) {
+    box.classList.add('unlocked');
+    box.onclick = function() { openTreasure(); };
+    status.innerHTML = '✨ 宝箱已解锁！点击开启';
+  } else {
+    box.classList.add('locked');
+    box.onclick = null;
+    status.innerHTML = '今日还需 <b id="treasureNeed">' + (TREASURE_MIN_SCORE - score) + '</b> ⭐ 解锁宝箱';
+  }
+}
+
+function renderItems() {
+  const d = loadData();
+  const items = d.items || { doubleCard:0, skipCard:0, immunityCard:0 };
+  document.getElementById('itemDoubleCard').textContent = items.doubleCard || 0;
+  document.getElementById('itemSkipCard').textContent = items.skipCard || 0;
+  document.getElementById('itemImmunityCard').textContent = items.immunityCard || 0;
+  document.getElementById('btnUseDouble').disabled = !(items.doubleCard > 0);
+  document.getElementById('btnUseSkip').disabled = !(items.skipCard > 0);
+  document.getElementById('btnUseImmunity').disabled = !(items.immunityCard > 0);
+}
+
+function openTreasure() {
+  if (isTreasureOpened()) return;
+  const score = getTodayScore();
+  if (score < TREASURE_MIN_SCORE) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'treasure-open-overlay';
+  overlay.id = 'treasureOpenAnim';
+  overlay.innerHTML = '<div style="text-align:center;color:#fff"><div class="treasure-open-box">🎁</div></div>';
+  document.body.appendChild(overlay);
+
+  setTimeout(function() {
+    overlay.remove();
+    doLottery();
+  }, 1200);
+}
+
+function doLottery() {
+  const rewards = TREASURE_REWARDS;
+  const totalWeight = rewards.reduce(function(s, r) { return s + r.weight; }, 0);
+  let rand = Math.random() * totalWeight;
+  let picked = rewards[rewards.length - 1];
+  for (const r of rewards) {
+    rand -= r.weight;
+    if (rand <= 0) { picked = r; break; }
+  }
+
+  const d = loadData();
+  d.treasureOpened[getToday()] = true;
+
+  if (picked.type === 'double') {
+    d.items.doubleCard = (d.items.doubleCard || 0) + 1;
+    showLotteryResult(picked, '获得 🃏 双倍卡！');
+  } else if (picked.type === 'skip') {
+    d.items.skipCard = (d.items.skipCard || 0) + 1;
+    showLotteryResult(picked, '获得 🎫 免做卡！');
+  } else if (picked.type === 'immunity') {
+    d.items.immunityCard = (d.items.immunityCard || 0) + 1;
+    showLotteryResult(picked, '获得 🛡️ 免罚卡！');
+  } else {
+    showEncourageResult(picked);
+  }
+  saveData(d);
+  renderTreasure();
+  renderItems();
+}
+
+function showLotteryResult(reward, cardText) {
+  document.getElementById('prizeEmoji').textContent = reward.emoji;
+  document.getElementById('prizeName').textContent = reward.name;
+  document.getElementById('prizeDesc').textContent = reward.desc;
+  document.getElementById('prizeCard').style.display = 'inline-block';
+  document.getElementById('prizeCard').textContent = cardText;
+  document.getElementById('prizeEncourage').style.display = 'none';
+  document.getElementById('lotteryModalOverlay').style.display = 'flex';
+}
+
+var ENCOURAGE_TEXTS = [
+  '豆豆今天超棒的！明天也要继续加油哦~ 💪',
+  '每一次努力都在闪闪发光！明天也要加油！ ✨',
+  '你是最棒的小勇士！今天的努力，明天会开花结果！ 🌸',
+  '坚持就是胜利！豆豆是最厉害的小朋友！ 🏆',
+  '今天的你超认真！明天也要保持这份热情哦！ 🔥',
+  '一步一步往前走，你正在变成更好的自己！ 🌟',
+  '豆豆加油！爸爸妈妈为你感到骄傲！ 🙏',
+  '每天进步一点点，未来就会很了不起！ 🚀',
+];
+
+function showEncourageResult(reward) {
+  const txt = ENCOURAGE_TEXTS[Math.floor(Math.random() * ENCOURAGE_TEXTS.length)];
+  document.getElementById('prizeEmoji').textContent = reward.emoji;
+  document.getElementById('prizeName').textContent = reward.name;
+  document.getElementById('prizeDesc').textContent = reward.desc;
+  document.getElementById('prizeCard').style.display = 'none';
+  document.getElementById('prizeEncourage').style.display = 'block';
+  document.getElementById('prizeEncourage').textContent = txt;
+  document.getElementById('lotteryModalOverlay').style.display = 'flex';
+}
+
+function closeLotteryModal(e) {
+  if (e && e.target !== document.getElementById('lotteryModalOverlay')) return;
+  document.getElementById('lotteryModalOverlay').style.display = 'none';
+}
+
+// ==================== 道具使用 ====================
+
+function useDoubleCard() {
+  const d = loadData();
+  if (!d.items || d.items.doubleCard <= 0) return;
+  let html = '';
+  const allTasks = getAllTasks();
+  const today = getToday();
+  const dayTasks = d.tasks[today] || {};
+  const doubled = (d.taskDouble && d.taskDouble[today]) || {};
+  for (const t of allTasks) {
+    const isDoubled = !!doubled[t.id];
+    const isDone = dayTasks[t.id] === true;
+    html += '<div class="double-task-item ' + (isDoubled ? 'doubled' : '') + '" onclick="selectDoubleTask(\'' + t.id + '\')">' 
+      + (isDoubled ? '⭐ ' : '') + t.name + (isDoubled ? '（已翻倍）' : '') + '</div>';
+  }
+  document.getElementById('doubleTaskList').innerHTML = html;
+  document.getElementById('doubleSelectOverlay').style.display = 'flex';
+}
+
+function selectDoubleTask(taskId) {
+  const d = loadData();
+  const today = getToday();
+  if (!d.taskDouble) d.taskDouble = {};
+  if (!d.taskDouble[today]) d.taskDouble[today] = {};
+  
+  if (d.taskDouble[today][taskId]) {
+    delete d.taskDouble[today][taskId];
+    showToast('已取消翻倍');
+  } else {
+    d.taskDouble[today][taskId] = true;
+    d.items.doubleCard--;
+    showToast('✅ 双倍卡已使用！该任务今日得分翻倍！');
+  }
+  saveData(d);
+  document.getElementById('doubleSelectOverlay').style.display = 'none';
+  renderItems();
+  renderAll();
+}
+
+function closeDoubleSelect(e) {
+  if (e && e.target !== document.getElementById('doubleSelectOverlay')) return;
+  document.getElementById('doubleSelectOverlay').style.display = 'none';
+}
+
+function useSkipCard() {
+  const d = loadData();
+  if (!d.items || d.items.skipCard <= 0) return;
+  let html = '';
+  const allTasks = getAllTasks();
+  const today = getToday();
+  const dayTasks = d.tasks[today] || {};
+  for (const t of allTasks) {
+    const isDone = dayTasks[t.id] === true;
+    html += '<div class="skip-task-item ' + (isDone ? 'done' : '') + '" onclick="selectSkipTask(\'' + t.id + '\')">' 
+      + t.name + (isDone ? '（已完成）' : '') + '</div>';
+  }
+  document.getElementById('skipTaskList').innerHTML = html;
+  document.getElementById('skipSelectOverlay').style.display = 'flex';
+}
+
+function selectSkipTask(taskId) {
+  const d = loadData();
+  const today = getToday();
+  if (!d.tasks[today]) d.tasks[today] = {};
+  
+  if (d.tasks[today][taskId] === true) {
+    showToast('该任务已完成，无需使用免做卡');
+    return;
+  }
+  
+  d.tasks[today][taskId] = true;
+  d.items.skipCard--;
+  saveData(d);
+  document.getElementById('skipSelectOverlay').style.display = 'none';
+  showToast('🎫 免做卡已使用！任务自动完成+1⭐');
+  renderItems();
+  renderAll();
+}
+
+function closeSkipSelect(e) {
+  if (e && e.target !== document.getElementById('skipSelectOverlay')) return;
+  document.getElementById('skipSelectOverlay').style.display = 'none';
+}
+
+function useImmunityCard() {
+  const d = loadData();
+  if (!d.items || d.items.immunityCard <= 0) return;
+  const today = getToday();
+  const dayTasks = d.tasks[today] || {};
+  
+  const allTasks = getAllTasks();
+  let found = false;
+  for (const t of allTasks) {
+    if (dayTasks[t.id] === 'missed' && t.penalty > 0) {
+      delete d.tasks[today][t.id];
+      found = true;
+      break;
+    }
+  }
+  
+  if (!found) {
+    showToast('今天还没有扣分哦，免罚卡已保留~');
+    return;
+  }
+  
+  d.items.immunityCard--;
+  saveData(d);
+  showToast('🛡️ 免罚卡已使用！扣分已抵消！');
+  renderItems();
+  renderAll();
+}
+
+function addCustomGift() {
+  showGiftEditor();
+  setTimeout(() => {
+    const d = loadData();
+    if (!d.customGifts) d.customGifts = [];
+    const newId = 'custom_' + Date.now();
+    d.customGifts.push({ id: newId, name: '新礼物', cost: 50, emoji: '🎁' });
+    saveData(d);
+    renderGiftEditor();
+    const inputs = document.querySelectorAll('#giftEditorContent input[data-field="name"]');
+    if (inputs.length > 0) inputs[inputs.length - 1].focus();
+  }, 100);
+}
+
+// ==================== 任务编辑器 ====================
+
+const GROUP_OPTIONS = Object.entries(DEFAULT_TASK_GROUPS).map(([gid, g]) => ({ gid, emoji: g.emoji, label: g.label }));
+
+function showTaskEditor() {
+  renderTaskEditor();
+  document.getElementById('taskEditorOverlay').style.display = 'flex';
+}
+
+function closeTaskEditor(e) {
+  if (e && e.target !== document.getElementById('taskEditorOverlay')) return;
+  document.getElementById('taskEditorOverlay').style.display = 'none';
+  renderAll();
+}
+
+function renderTaskEditor() {
+  let html = '';
+  for (const [gid, group] of Object.entries(TASK_GROUPS)) {
+    html += `<div style="font-weight:700;font-size:13px;margin:10px 0 4px;color:var(--text-light)">${group.emoji} ${group.label}</div>`;
+    for (let i = 0; i < group.tasks.length; i++) {
+      const t = group.tasks[i];
+      const penVal = t.penalty || 0;
+      html += `
+        <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;padding:6px 8px;background:var(--bg);border-radius:8px;font-size:12px;flex-wrap:wrap">
+          <input value="${escapeHtml(t.name)}" data-gid="${gid}" data-idx="${i}" data-field="name"
+            style="flex:1;min-width:120px;padding:6px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px">
+          <select data-gid="${gid}" data-idx="${i}" data-field="coin" style="width:58px;padding:6px;border:1.5px solid var(--border);border-radius:6px;font-size:12px">
+            ${[1].map(v => `<option value="${v}" ${t.coin===v?'selected':''}>${v}⭐</option>`).join('')}
+          </select>
+          <select data-gid="${gid}" data-idx="${i}" data-field="penalty" style="width:64px;padding:6px;border:1.5px solid var(--border);border-radius:6px;font-size:12px">
+            <option value="0" ${penVal===0?'selected':''}>不扣分</option>
+            <option value="1" ${penVal===1?'selected':''}>扣1分</option>
+            <option value="2" ${penVal===2?'selected':''}>扣2分</option>
+            <option value="3" ${penVal===3?'selected':''}>扣3分</option>
+            <option value="5" ${penVal===5?'selected':''}>扣5分</option>
+          </select>
+          <button onclick="deleteTask('${gid}',${i})" style="background:none;border:none;color:#cc6666;font-size:18px;cursor:pointer;padding:4px 6px;line-height:1" title="删除">×</button>
+        </div>`;
+    }
+  }
+  document.getElementById('taskEditorContent').innerHTML = html;
+
+  document.querySelectorAll('#taskEditorContent input, #taskEditorContent select').forEach(el => {
+    el.addEventListener('change', function() {
+      const gid = this.dataset.gid;
+      const idx = parseInt(this.dataset.idx);
+      const field = this.dataset.field;
+      let val = (field === 'coin' || field === 'penalty') ? parseInt(this.value) : this.value;
+      if (TASK_GROUPS[gid] && TASK_GROUPS[gid].tasks[idx]) {
+        TASK_GROUPS[gid].tasks[idx][field] = val;
+        saveTaskConfig();
+      }
+    });
+  });
+}
+
+function deleteTask(gid, idx) {
+  if (!confirm('确定删除这个任务吗？')) return;
+  TASK_GROUPS[gid].tasks.splice(idx, 1);
+  saveTaskConfig();
+  renderTaskEditor();
+}
+
+function addNewTask() {
+  const gid = prompt('选择分类：\n' + GROUP_OPTIONS.map(g => `${g.emoji} ${g.label}`).join(' / '));
+  if (!gid) return;
+  let matchedGid = null;
+  for (const opt of GROUP_OPTIONS) {
+    if (gid.includes(opt.label) || gid === opt.gid) { matchedGid = opt.gid; break; }
+  }
+  if (!matchedGid) { showToast('未找到匹配分类，请输入：学习/运动/生活/好习惯'); return; }
+
+  const name = prompt('任务名称：');
+  if (!name || !name.trim()) return;
+  const coin = parseInt(prompt('成长币值（建议1）：')) || 1;
+  if (isNaN(coin) || coin <= 0) { showToast('请输入有效的数值'); return; }
+  const penalty = parseInt(prompt('扣分值（0=不扣分）：')) || 0;
+
+  const newId = 'u_' + Date.now();
+  TASK_GROUPS[matchedGid].tasks.push({ id: newId, name: name.trim(), coin, penalty });
+  saveTaskConfig();
+  renderTaskEditor();
+  showToast('已添加任务');
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ==================== 礼物编辑器 ====================
+
+function resetAll() {
+  if (!confirm('确定要重置所有数据吗？')) return;
+  if (!confirm('再次确认：所有打卡记录和成长币将被清除！')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function showToast(msg) {
+  const existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+  const div = document.createElement('div');
+  div.className = 'toast';
+  div.textContent = msg;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 2100);
+}
+
+function getEditableGifts() {
+  const d = loadData();
+  const defaults = DEFAULT_GIFTS.map(g => ({ ...g, _type: 'default' }));
+  const customs = (d.customGifts || []).map(g => ({ ...g, _type: 'custom' }));
+  return [...defaults, ...customs];
+}
+
+function showGiftEditor() {
+  renderGiftEditor();
+  document.getElementById('giftEditorOverlay').style.display = 'flex';
+}
+
+function closeGiftEditor(e) {
+  if (e && e.target !== document.getElementById('giftEditorOverlay')) return;
+  document.getElementById('giftEditorOverlay').style.display = 'none';
+  renderAll();
+}
+
+function renderGiftEditor() {
+  const gifts = getEditableGifts();
+  let html = '';
+  for (let i = 0; i < gifts.length; i++) {
+    const g = gifts[i];
+    html += `
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;padding:6px 8px;background:var(--bg);border-radius:8px;font-size:12px">
+        <input value="${escapeHtml(g.emoji || '🎁')}" data-idx="${i}" data-field="emoji"
+          style="width:38px;padding:5px 4px;border:1.5px solid var(--border);border-radius:6px;font-size:14px;text-align:center">
+        <input value="${escapeHtml(g.name)}" data-idx="${i}" data-field="name"
+          style="flex:1;min-width:0;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px">
+        <input value="${g.cost}" data-idx="${i}" data-field="cost" type="number" min="1"
+          style="width:58px;padding:5px;border:1.5px solid var(--border);border-radius:6px;font-size:12px">
+        <button onclick="deleteGift(${i}, '${g._type}', '${g.id}')" style="background:none;border:none;color:#cc6666;font-size:18px;cursor:pointer;padding:4px 6px;line-height:1" title="删除">×</button>
+      </div>`;
+  }
+  document.getElementById('giftEditorContent').innerHTML = html;
+
+  document.querySelectorAll('#giftEditorContent input').forEach(el => {
+    el.addEventListener('change', function() {
+      const idx = parseInt(this.dataset.idx);
+      const field = this.dataset.field;
+      const gifts = getEditableGifts();
+      const g = gifts[idx];
+      if (!g) return;
+      let val = field === 'cost' ? parseInt(this.value) : this.value;
+      if (field === 'cost' && (isNaN(val) || val <= 0)) { showToast('请输入有效数值'); return; }
+      if (g._type === 'default') {
+        const d = loadData();
+        if (!d.giftConfig) d.giftConfig = {};
+        if (!d.giftConfig[g.id]) d.giftConfig[g.id] = {};
+        d.giftConfig[g.id][field] = val;
+        saveData(d);
+        const def = DEFAULT_GIFTS.find(x => x.id === g.id);
+        if (def) def[field] = val;
+      } else {
+        const d = loadData();
+        const cg = (d.customGifts || []).find(x => x.id === g.id);
+        if (cg) { cg[field] = val; saveData(d); }
+      }
+      showToast('已保存');
+    });
+  });
+}
+
+function deleteGift(idx, type, id) {
+  if (!confirm('确定删除这个礼物吗？')) return;
+  if (type === 'default') {
+    const d = loadData();
+    if (!d.giftConfig) d.giftConfig = {};
+    if (!d.giftConfig[id]) d.giftConfig[id] = {};
+    d.giftConfig[id].hidden = true;
+    saveData(d);
+    const def = DEFAULT_GIFTS.find(x => x.id === id);
+    if (def) def.hidden = true;
+  } else {
+    const d = loadData();
+    d.customGifts = (d.customGifts || []).filter(x => x.id !== id);
+    saveData(d);
+  }
+  renderGiftEditor();
+  showToast('已删除');
+}
+
+function addNewGift() {
+  const name = prompt('礼物名称：');
+  if (!name || !name.trim()) return;
+  const cost = parseInt(prompt('需要多少成长币：'));
+  if (isNaN(cost) || cost <= 0) { showToast('请输入有效的数值'); return; }
+  const emoji = prompt('emoji图标（可选）：') || '🎁';
+  const d = loadData();
+  const newId = 'custom_' + Date.now();
+  if (!d.customGifts) d.customGifts = [];
+  d.customGifts.push({ id: newId, name: name.trim(), cost, emoji });
+  saveData(d);
+  renderGiftEditor();
+  showToast('已添加礼物');
+}
+
+// ==================== 键盘监听 ====================
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('giftEditorOverlay').style.display === 'flex') closeGiftEditor();
+    if (document.getElementById('taskEditorOverlay').style.display === 'flex') closeTaskEditor();
+    if (document.getElementById('doubleSelectOverlay').style.display === 'flex') closeDoubleSelect();
+    if (document.getElementById('skipSelectOverlay').style.display === 'flex') closeSkipSelect();
+    if (document.getElementById('lotteryModalOverlay').style.display === 'flex') closeLotteryModal();
+  }
+});
+
+// ==================== 初始化 ====================
+loadTaskConfig();
+applyGiftConfig();
+renderAll();
+
+function applyGiftConfig() {
+  const d = loadData();
+  if (!d.giftConfig) return;
+  for (const g of DEFAULT_GIFTS) {
+    const cfg = d.giftConfig[g.id];
+    if (!cfg) continue;
+    if (cfg.name !== undefined) g.name = cfg.name;
+    if (cfg.cost !== undefined) g.cost = cfg.cost;
+    if (cfg.emoji !== undefined) g.emoji = cfg.emoji;
+    if (cfg.hidden !== undefined) g.hidden = cfg.hidden;
+  }
+}
+</script>
+</body>
+</html>
